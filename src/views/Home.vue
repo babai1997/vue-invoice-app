@@ -1,11 +1,48 @@
 <template>
-  <div class="home">
+  <div class="home container">
+    <!-- Header -->
+    <div class="header flex">
+      <div class="left flex flex-column">
+        <h1>Invoices</h1>
+        <span>There are 4 total invoices</span>
+      </div>
+      <div class="right flex">
+        <div @click="toggleFilterMenu" class="filter flex">
+          <span>Filter by status</span>
+          <img src="../assets/icon-arrow-down.svg" alt="" />
+          <ul v-show="filterMenu" class="filter-menu">
+            <li @click="filteredInvoices">Draft</li>
+            <li @click="filteredInvoices">Pending</li>
+            <li @click="filteredInvoices">Paid</li>
+            <li @click="filteredInvoices">Clear Filter</li>
+          </ul>
+        </div>
+        <div @click="newInvoice" class="button flex">
+          <div class="inner-button flex">
+            <img src="../assets/icon-plus.svg" alt="" />
+          </div>
+          <span>New Invoice</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Home',
+  data(){
+    return {
+      filterMenu: null
+    }
+  },
+  components: {},
+  methods: {
+    newInvoice(){},
+    toggleFilterMenu(){
+      this.filterMenu = !this.filterMenu;
+    }
+  }
 };
 </script>
 
