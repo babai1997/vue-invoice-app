@@ -1,8 +1,12 @@
 <template>
-  <div>
+  <div v-if="invoicesLoaded">
     <div v-if="!mobile" class="app flex flex-column">
       <Navigation />
       <div class="app-content flex flex-column">
+        <Modal v-if="modalActive" />
+        <transition name="invoice">
+          <InvoiceModal v-if="invoiceModal" />
+        </transition>
         <router-view />
       </div>
     </div>
@@ -14,22 +18,29 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import Navigation from "./components/Navigation.vue";
-
+import InvoiceModal from "./components/InvoiceModal.vue";
+import Modal from "./components/Modal.vue";
 export default {
   data() {
     return {
       mobile: null,
-    }
+    };
   },
   components: {
     Navigation,
+    InvoiceModal,
+    Modal,
   },
   created() {
+    this.GET_INVOICES();
     this.checkScreen();
     window.addEventListener("resize", this.checkScreen);
   },
   methods: {
+    ...mapActions(["GET_INVOICES"]),
+
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {
@@ -37,10 +48,12 @@ export default {
         return;
       }
       this.mobile = false;
-    }
-  }
-
-}
+    },
+  },
+  computed: {
+    ...mapState(["invoiceModal", "modalActive", "invoicesLoaded"]),
+  },
+};
 </script>
 
 <style lang="scss">
@@ -56,7 +69,6 @@ export default {
 .app {
   background-color: #141625;
   min-height: 100vh;
-
   @media (min-width: 900px) {
     flex-direction: row !important;
   }
@@ -158,7 +170,6 @@ button,
   align-items: center;
   padding: 8px 30px;
   border-radius: 10px;
-
   &::before {
     content: "";
     width: 10px;
@@ -171,7 +182,6 @@ button,
 .paid {
   color: #33d69f;
   background-color: rgba(51, 214, 160, 0.1);
-
   &::before {
     background-color: #33d69f;
   }
@@ -180,7 +190,6 @@ button,
 .pending {
   color: #ff8f00;
   background-color: rgba(255, 145, 0, 0.1);
-
   &::before {
     background-color: #ff8f00;
   }
@@ -189,7 +198,6 @@ button,
 .draft {
   color: #dfe3fa;
   background-color: rgba(223, 227, 250, 0.1);
-
   &::before {
     background-color: #dfe3fa;
   }
