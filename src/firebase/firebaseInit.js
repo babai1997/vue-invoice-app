@@ -4,12 +4,12 @@ import { getFirestore } from "firebase/firestore"; // Import Firestore
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyB1eb7QMnO9Itp2jh8fZcQNjUpwN8VoNpM",
-  authDomain: "vue-invoice-app-434b6.firebaseapp.com",
-  projectId: "vue-invoice-app-434b6",
-  storageBucket: "vue-invoice-app-434b6.appspot.com",
-  messagingSenderId: "989097792977",
-  appId: "1:989097792977:web:4e1240539451a1f9307cf0"
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID
 };
 
 // Initialize Firebase
