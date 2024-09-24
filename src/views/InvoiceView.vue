@@ -33,6 +33,13 @@
         >
           Mark as Pending
         </button>
+        <button
+          v-if="currentInvoice.invoicePaid || currentInvoice.invoicePending"
+          @click="prinInvoice()"
+          class="blue"
+        >
+          Print
+        </button>
       </div>
     </div>
 
@@ -85,13 +92,13 @@
           <div v-for="(item, index) in currentInvoice.invoiceItemList" :key="index" class="item flex">
             <p>{{ item.itemName }}</p>
             <p>{{ item.qty }}</p>
-            <p>{{ item.price }}</p>
-            <p>{{ item.total }}</p>
+            <p>{{ item.price }}$</p>
+            <p>{{ item.total }}$</p>
           </div>
         </div>
         <div class="total flex">
           <p>Amount Due</p>
-          <p>{{ currentInvoice.invoiceTotal }}</p>
+          <p>{{ currentInvoice.invoiceTotal }}$</p>
         </div>
       </div>
     </div>
@@ -113,7 +120,7 @@ export default {
   methods: {
     ...mapMutations(["SET_CURRENT_INVOICE", "TOGGLE_EDIT_INVOICE", "TOGGLE_INVOICE"]),
 
-    ...mapActions(["DELETE_INVOICE", "UPDATE_STATUS_TO_PENDING", "UPDATE_STATUS_TO_PAID"]),
+    ...mapActions(["DELETE_INVOICE", "UPDATE_STATUS_TO_PENDING", "UPDATE_STATUS_TO_PAID", "PRINT_INVOICE"]),
 
     getCurrentInvoice() {
       this.SET_CURRENT_INVOICE(this.$route.params.invoiceId);
@@ -136,6 +143,9 @@ export default {
 
     updateStatusToPending(docId) {
       this.UPDATE_STATUS_TO_PENDING(docId);
+    },
+    prinInvoice() {
+      this.PRINT_INVOICE();
     },
   },
   computed: {
@@ -339,6 +349,163 @@ export default {
           text-align: right;
         }
       }
+    }
+  }
+    /* Add styles for print */
+  // @media print {
+  //   .nav-link, .header .right {
+  //     display: none;
+  //   }
+
+  //   .invoice-details {
+  //     margin: 0;
+  //     padding: 20px;
+  //     font-size: 12px;
+  //   }
+
+  //   .invoice-view {
+  //     width: 100%;
+  //     height: auto;
+  //     background: white;
+  //   }
+
+  //   .total p:nth-child(2) {
+  //     font-size: 20px;
+  //   }
+  // }
+
+   @media print {
+     /* Remove default margins/padding from body and html */
+    body, html {
+      margin: 0;
+      padding: 0;
+    }
+    /* Hide unwanted screen-only elements */
+    .nav-link, .header .right, .header .left {
+      display: none;
+    }
+    /* Set the page to a standard width and remove background styles */
+    .invoice-view {
+      width: 100%;
+      background-color: white;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+      margin: 0;
+    }
+
+    /* Remove the dark background and add border styles for a cleaner print view */
+    .header,
+    .invoice-details,
+    .billing-items,
+    .total {
+      padding:0; /* Reduce padding to avoid extra space */
+      margin-top: 0; /* Remove top margin */
+      background-color: white;
+      color: black;
+      border: none;
+    }
+
+    /* Remove the status section from print view */
+    .header .left {
+      display: none;
+    }
+
+    /* Format top section (Invoice ID, Description) */
+    .invoice-details .top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .invoice-details .top p {
+      font-size: 14px;
+      color: black;
+    }
+
+    /* Format middle section (Invoice, Payment Date, Bill To, Sent To) */
+    .invoice-details .middle {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .invoice-details h4 {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: black;
+    }
+
+    .invoice-details p {
+      font-size: 14px;
+      color: black;
+    }
+
+    /* Billing Items - Add border and spacing */
+    .billing-items {
+      margin-top: 20px;
+    }
+
+    .billing-items .heading {
+      display: flex;
+      border-bottom: 2px solid black;
+      padding-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .billing-items .heading p {
+      font-size: 14px;
+      text-align: right;
+
+      &:first-child {
+        text-align: left;
+      }
+    }
+
+    .billing-items .item {
+      display: flex;
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+
+    .billing-items .item p {
+      font-size: 14px;
+      color: black;
+      text-align: right;
+
+      &:first-child {
+        text-align: left;
+      }
+    }
+
+    /* Total Section */
+    .total {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid black;
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .total p {
+      text-align: right;
+
+      &:first-child {
+        text-align: left;
+      }
+    }
+
+    /* Additional print adjustments */
+    .invoice-details, .billing-items, .total {
+      width: 100%;
+      margin: 0;
+      padding: 20px;
     }
   }
 }

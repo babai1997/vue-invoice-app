@@ -23,6 +23,10 @@
       flex-direction: column;
       border-radius: 0 20px 20px 0;
     }
+
+     @media print {
+      display: none;
+     }
   
     .branding {
       border-radius: 0 20px 20px 0;

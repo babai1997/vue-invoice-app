@@ -64,6 +64,10 @@ export default {
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
+  // overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .app {
@@ -134,6 +138,10 @@ button,
 
 .orange {
   background-color: #ff8f00;
+}
+
+.blue {
+  background-color: #7c5dfa
 }
 
 // utility classes
